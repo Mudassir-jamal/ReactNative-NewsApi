@@ -52,11 +52,13 @@ export default function Home({navigation}) {
 
   const savedNews  = async (index) => {
     let d = jsondata.articles[index];
+    console.log(d,"===>")
     setSvObj([...svObj,
         {title : d.title,
          author : d.author,
          img : d.urlToImage,
-         date : d.publishedAt
+         date : d.publishedAt,
+         des : d.description
         
         }])
     // console.log(d,"dd");
@@ -73,33 +75,35 @@ export default function Home({navigation}) {
   };
 
 
+  console.log(svObj,"DATA sVED")
 
 
-//   const getData = async (SAVED_NEWS) => {
+
+  // const getData = async (SAVED_NEWS) => {
     
-//     try {
-//         const jsonValue = await AsyncStorage.getItem('DATA')
+  //   try {
+  //       const jsonValue = await AsyncStorage.getItem('DATA')
        
-//         if(jsonValue != null){
-//             JSON.parse(jsonValue)
-//             console.log(jsonValue)
+  //       if(jsonValue != null){
+  //           JSON.parse(jsonValue)
+  //           console.log(jsonValue)
 
-//             // navigation.navigate("SavedNews" , {data : jsonValue})
+  //           // navigation.navigate("SavedNews" , {data : jsonValue})
 
-//         }
-//         else{
-//             console.log("beta")
-//         }
-//     } catch(e) {
-//         // error reading value
-//         console.log(e)
-//     }
-//   }
+  //       }
+  //       else{
+  //           console.log("beta")
+  //       }
+  //   } catch(e) {
+  //       // error reading value
+  //       console.log(e)
+  //   }
+  // }
   
 
     // console.log(svObj, 'kkk');
   return (
-    <View>
+    <View style={{backgroundColor:"black"}}>
       {jsondata !== undefined ? (
         <>
           <View>
@@ -110,11 +114,11 @@ export default function Home({navigation}) {
                   alignItems: 'center',
                   height: '100%',
                 }}>
-                <ActivityIndicator size={80} color="blue" animating={loader} />
+                <ActivityIndicator size={80} color="red" animating={loader} />
               </View>
             ) : (
               <>
-           
+               {/* <TouchableOpacity onPress={() => getData()}><Text>cccc</Text></TouchableOpacity> */}
                 <FlatList
                   // showsVerticalScrollIndicator={false}
                   // removeClippedSubviews

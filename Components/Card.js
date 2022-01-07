@@ -11,32 +11,27 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-const Card = ({item,index,savedNews}) => {
-    console.log(index)
+const Card = ({item, index, savedNews}) => {
+  // console.log(index)
   const [loading, setLoading] = useState(false);
   const [objSv, setObjSv] = useState({});
-
 
   const onLoading = value => {
     setLoading(value);
   };
 
-  
-    //  const savedNews = async (index) => {
-    //    setObjSv(item)
+  //  const savedNews = async (index) => {
+  //    setObjSv(item)
 
-    //     try {
-    //       const jsonValue = JSON.stringify(objSv)
-    //       await AsyncStorage.setItem('SAVED_NEWS', jsonValue)
-    //     } catch (e) {
-    //       // saving error
-    //     }
-    //   }
+  //     try {
+  //       const jsonValue = JSON.stringify(objSv)
+  //       await AsyncStorage.setItem('SAVED_NEWS', jsonValue)
+  //     } catch (e) {
+  //       // saving error
+  //     }
+  //   }
 
-  
-
-
-//   console.log(objSv , "=====>")
+  //   console.log(objSv , "=====>")
 
   return (
     <View style={styles.main}>
@@ -46,8 +41,6 @@ const Card = ({item,index,savedNews}) => {
             <ActivityIndicator color={'red'} size={40} />
           </View>
         )}
-        <Text>{item.title}</Text>
-
         <View style={styles.img_contai}>
           <Image
             style={{height: '100%', width: '100%'}}
@@ -57,11 +50,24 @@ const Card = ({item,index,savedNews}) => {
           />
         </View>
 
-        <TouchableOpacity
-          style={{backgroundColor: 'gray'}}
-          onPress={() => savedNews(index)}>
-          <Text>Save News</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>{item.title}</Text>
+
+        <View style={styles.bottom}>
+          <View>
+            <Text style={styles.author}>{item.author}kk</Text>
+          </View>
+
+          <TouchableOpacity style={styles.btn} onPress={() => savedNews(index)}>
+            <Text
+              style={{
+                color: 'white',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+              }}>
+              Save News
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -75,21 +81,65 @@ const styles = StyleSheet.create({
   },
 
   card_wrapper: {
-    borderWidth: 1,
-    borderColor:"lightgary",
+    backgroundColor:"black",
+    // borderWidth: 1,
+    // borderColor: 'lightgary',
     width: '95%',
-    padding:10,
-    height: "auto",
-    shadowColor: 'red',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.9,
-    shadowRadius: 4,
-    elevation: 4,
+    height: 'auto',
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'white',
+    borderBottomEndRadius : 8,
+    borderTopStartRadius: 8,
+    borderTopEndRadius: 8,
+    borderBottomStartRadius: 8,
+    borderBottomLeftRadius:8,
+    borderBottomRightRadius:8,
+    shadowColor: "white",
+// shadowOffset: {
+// 	width: 0,
+// 	height: 12,
+// },
+    elevation: 60,
+    overflow:"hidden"
   },
 
   img_contai: {
     height: 200,
     width: '100%',
+  },
+
+  title: {
+    fontWeight: 'bold',
+    textTransform: 'capitalize',
+    lineHeight: 15,
+    marginTop: 10,
+    padding:10,
+    color:"white"
+  },
+  bottom: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap:"wrap",
+    alignItems:"center",
+    marginTop: 25,
+    padding: 10,
+  },
+
+  btn: {
+    backgroundColor: 'darkred',
+    height:40,
+    alignItems:"center",
+    justifyContent:"center",
+    width:100,
+    borderRadius:8
+  },
+
+  author: {
+    fontSize: 12,
+    color:"white"
   },
 });
 export default Card;

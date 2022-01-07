@@ -1,106 +1,90 @@
-import React,{useEffect , useState} from 'react'
+import React, {useEffect, useState} from 'react';
 
-import { View, Text , FlatList ,ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  FlatList,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+  RefreshControl
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Card from '../Components/Card';
 import SavedCard from '../Components/SavedCard';
 
+const SavedNews = ({route, navigation}) => {
+  const [loader, setLoader] = useState(false);
+  const [data, setGetdata] = useState([]);
+  const [newdata, setNewData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-const SavedNews = ({route,navigation}) => {
-    
-    const [loader, setLoader] = useState(false);
-    const [data , setGetdata] = useState([])
-    const [newdata , setNewData] = useState([])
-    
-    
-    useEffect(() => {
-        setLoader(true)
-        getData() 
-        // setNewData(data.d)
-        // importData()       
-    },[])
+  useEffect(() => {
+      
+      const unsubscribe = navigation.addListener('focus', () => {
+          // do something
+          getData();
+          setLoader(true);
+          setRefreshing(true)
+        console.log('Hello World!')
+    });
+    return unsubscribe;
+}, [navigation]);
 
-
-    
-    
-            const getData = async () => {
-
-                try {
-                    const jsonValue = await AsyncStorage.getItem('DATA')
-                   
-                    if(jsonValue != null){
-                        JSON.parse(jsonValue)
-                        console.log({jsonValue},".....................")
-
-                        // setGetdata({jsonValue})
-                        
-                        setLoader(false)
-                    }
-                    else{
-                        console.log("beta")
-                    }
-                } catch(e) {
-                    // error reading value
-                    console.log(e)
-                }
-                // console.log(data,"sved")
-              }
-//    const {data}  = route.params
-    console.log(data,"sved")
-
-    return (
-        <View style={{height:"100%" }}>
-
-            {/* {data !== undefined ?
-            <ActivityIndicator size={80} color="blue" animating={loader} />
-
-
-            : 
-            
-            } */}
-            {/* {
-            data.d.map((e ,i)=> {
-                return <View key={i}>
-                   
-                    <SavedCard item={e}/>
-                </View>
-            }) 
-            
-        } */}
-
-
-          
-            {data == undefined ?
-              
-              <Text>nhkjn</Text>
-              
-              :
-              <>
-              
-              {/* <Text>{data.jsonValue[0].title}</Text> */}
-              {/* <FlatList
-            
-            data={data.jsonValue}
-            keyExtractor={(item, index) => 'key' + index}
-            
-            renderItem={({item}) => {
-                return (
-                    
-                    <SavedCard item={item}/>
-                    // <Card  item={item}/>
-                    
-                    
-                    
-                    );
-                }}
-                />
-                </> */}
-
-                </>
+const getData = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('DATA');
+        // return jsonValue != null ? setGetdata(JSON.parse(jsonValue)) : null;
+        if(jsonValue != null) {
+            setGetdata(JSON.parse(jsonValue))
+            console.log(jsonValue,"==================================")
+            setRefreshing(false)
+            setLoader(false)
 
         }
-        </View>
-    )
-}
+        
+        
+    } catch (e) {
+        // error reading value
+        console.log(e);
+    }
 
-export default SavedNews
+
+};
+
+if(!data){
+    return null
+}
+  console.log(data, 'sved');
+  //    const {data}  = route.params
+  // console.log(data[0].des,"sved2")
+
+  return (
+    <View style={{height: '100%'}}>
+      
+
+      {data !== undefined ? (
+        <>
+          {loader ? (
+            <View style={{alignItems:"center",justifyContent:"center" , height:"100%"}}>
+              <ActivityIndicator size={70} animating={loader} />
+            </View>
+          ) : (
+            <FlatList
+
+            refreshControl={<RefreshControl refreshing={refreshing} getData={getData} />}
+              removeClippedSubviews={true}
+              data={data}
+              keyExtractor={(item, index) => 'key' + index}
+              renderItem={({item}) => {
+                return <SavedCard item={item} />;
+              }}
+            />
+          )}
+        </>
+      ) : <Text>noo</Text>}
+    </View>
+  );
+};
+
+export default SavedNews;
